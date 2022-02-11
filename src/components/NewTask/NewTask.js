@@ -1,29 +1,46 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { useHttp } from "../../hooks/useHttp";
 
-import Section from '../UI/Section';
-import TaskForm from './TaskForm';
+import Section from "../UI/Section";
+import TaskForm from "./TaskForm";
 
 const NewTask = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  // const { isLoading, error, sendRequest: sendTask } = useHttp()
+
+  // const createTask = (taskData) => {
+
+  // }
+
+  // const enterTaskHandler = async (taskText) => {
+  //   sendTask({
+  //     url:  "https://react-practice-a3a21-default-rtdb.firebaseio.com/tasks.json",
+  //     method: "POST",
+  //     body: { text: taskText },
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  // }
 
   const enterTaskHandler = async (taskText) => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        'https://react-http-6b4a6.firebaseio.com/tasks.json',
+        "https://react-practice-a3a21-default-rtdb.firebaseio.com/tasks.json",
         {
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify({ text: taskText }),
           headers: {
-            'Content-Type': 'application/json',
-          },
+            "Content-Type": "application/json"
+          }
         }
       );
 
       if (!response.ok) {
-        throw new Error('Request failed!');
+        throw new Error("Request failed!");
       }
 
       const data = await response.json();
@@ -33,7 +50,7 @@ const NewTask = (props) => {
 
       props.onAddTask(createdTask);
     } catch (err) {
-      setError(err.message || 'Something went wrong!');
+      setError(err.message || "Something went wrong!");
     }
     setIsLoading(false);
   };
