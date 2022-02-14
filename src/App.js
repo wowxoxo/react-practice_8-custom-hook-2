@@ -1,17 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import Tasks from "./components/Tasks/Tasks";
 import NewTask from "./components/NewTask/NewTask";
-import { useHttp2 } from "./hooks/useHttp2";
+import { useFetch } from "./hooks/useFetch";
+import TaskService from "./api/TaskService";
 
 function App() {
   const [tasks, setTasks] = useState([]);
-
-  const requestConfig = useMemo(() => {
-    return {
-      url: "https://react-practice-a3a21-default-rtdb.firebaseio.com/tasks.json"
-    };
-  }, []);
 
   const transformAndSetTasks = useCallback((taskObj) => {
     const loadedTasks = [];
@@ -23,11 +18,12 @@ function App() {
     setTasks(loadedTasks);
   }, []);
 
-  const {
-    isLoading,
-    error,
-    sendRequest: fetchTasks
-  } = useHttp2(requestConfig, transformAndSetTasks);
+  const loadTasks = useCallback(async () => {
+    const response = await TaskService.getAll();
+    transformAndSetTasks(response);
+  }, [transformAndSetTasks]);
+
+  const [isLoading, error, fetchTasks] = useFetch(loadTasks);
 
   useEffect(() => {
     fetchTasks();
