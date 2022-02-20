@@ -26,9 +26,5 @@ export default class TaskService {
     if (!response.ok) {
       throw new Error("Request failed!");
     }
-
-    return taskText
-    // const data = await response.json();
-
   }
 }
