@@ -13,5 +13,22 @@ export default class TaskService {
     return data;
   }
 
-  static async addNew() {}
+  static async addNew(taskText) {
+    const response = await fetch(
+      "https://react-practice-a3a21-default-rtdb.firebaseio.com/tasks.json", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body:  JSON.stringify( {text: taskText} ),
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed!");
+    }
+
+    return taskText
+    // const data = await response.json();
+
+  }
 }
