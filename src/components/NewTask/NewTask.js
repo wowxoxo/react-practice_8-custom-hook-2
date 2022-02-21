@@ -7,22 +7,22 @@ import TaskForm from "./TaskForm";
 const NewTask = (props) => {
   const { onAddTask } = props
 
-  const updateTask = useCallback((taskText) => {
-    const generatedId = taskText.name; // firebase-specific => "name" contains generated id
+  const createTask = useCallback((taskText, taskName) => {
+    const generatedId = taskName; // firebase-specific => "name" contains generated id
     const createdTask = { id: generatedId, text: taskText };
     onAddTask(createdTask);
   }, [onAddTask])
   
-  const enterTaskHandler = useCallback(async (taskText) => {
-    await TaskService.addNew(taskText)
-    updateTask(taskText)
-  }, [updateTask]);
+  const sendRequestCreateTask = useCallback(async (taskText) => {
+    const response = await TaskService.addNew(taskText)
+    createTask(taskText, response)
+  }, [createTask]);
 
-  const [isLoading, error, what] = useFetch(enterTaskHandler);
+  const [isLoading, error, enterTaskHandler] = useFetch(sendRequestCreateTask);
 
   return (
     <Section>
-      <TaskForm onEnterTask={what} loading={isLoading} />
+      <TaskForm onEnterTask={enterTaskHandler} loading={isLoading} />
       {error && <p>{error}</p>}
     </Section>
   );
