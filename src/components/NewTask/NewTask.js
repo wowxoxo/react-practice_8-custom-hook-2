@@ -7,8 +7,8 @@ import TaskForm from "./TaskForm";
 const NewTask = (props) => {
   const { onAddTask } = props
 
-  const createTask = useCallback((taskText, taskName) => {
-    const generatedId = taskName; // firebase-specific => "name" contains generated id
+  const createTask = useCallback((taskText, taskData) => {
+    const generatedId = taskData.name; // firebase-specific => "name" contains generated id
     const createdTask = { id: generatedId, text: taskText };
     onAddTask(createdTask);
   }, [onAddTask])
