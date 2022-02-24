@@ -1,26 +1,11 @@
-import { useFetch } from "../../hooks/useFetch";
+import { useHttp } from "../../hooks/useHttp";
 
 import Section from "../UI/Section";
 import TaskForm from "./TaskForm";
-
-const FetchFunc = async (requestConfig, applyDataFn) => {
-
-     const response = await fetch(requestConfig.url, {
-        method: requestConfig.method ? requestConfig.method : "GET",
-        headers: requestConfig.headers ? requestConfig.headers : {},
-        body: requestConfig.body ? JSON.stringify(requestConfig.body) : null
-      });
-      if (!response.ok) {
-        throw new Error("Request failed!");
-      }
-
-      const data = await response.json();
-
-      applyDataFn(data);
-    }
+import TaskService from "../../api/TaskService";
 
 const NewTask = (props) => {
-  const { isLoading, error, sendRequest: sendTask } = useFetch(FetchFunc);
+  const { isLoading, error, sendRequest: sendTask } = useHttp(TaskService.getData);
   console.log(typeof sendTask);  // undefined
   const createTask = (taskText, taskData) => {
     const generatedId = taskData.name; // firebase-specific => "name" contains generated id
