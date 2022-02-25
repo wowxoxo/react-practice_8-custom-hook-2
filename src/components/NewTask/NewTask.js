@@ -2,10 +2,11 @@ import { useHttp } from "../../hooks/useHttp";
 
 import Section from "../UI/Section";
 import TaskForm from "./TaskForm";
+import TaskService from "../../api/TaskService";
 
 const NewTask = (props) => {
-  const { isLoading, error, sendRequest: sendTask } = useHttp();
-
+  const { isLoading, error, sendRequest: sendTask } = useHttp(TaskService.getData);
+  console.log(typeof sendTask);  // undefined
   const createTask = (taskText, taskData) => {
     const generatedId = taskData.name; // firebase-specific => "name" contains generated id
     const createdTask = { id: generatedId, text: taskText };
@@ -25,6 +26,7 @@ const NewTask = (props) => {
       },
       createTask.bind(null, taskText)
     );
+    console.log(typeof sendTask);  // undefined
   };
 
   return (
